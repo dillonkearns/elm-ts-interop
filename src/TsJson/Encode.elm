@@ -5,7 +5,7 @@ module TsJson.Encode exposing
     , object, Property, optional, required
     , UnionBuilder, union, variant, variant0, variantObject, variantLiteral, variantTagged, buildUnion
     , UnionEncodeValue
-    , list, dict, tuple, triple, maybe
+    , list, dict, tuple, triple, maybe, array
     , value
     , encoder, tsType
     , runExample
@@ -76,7 +76,7 @@ TypeScript Declaration file for your compiled Elm code.
 
 ## Collections
 
-@docs list, dict, tuple, triple, maybe
+@docs list, dict, tuple, triple, maybe, array
 
 
 ## In-Depth Example
@@ -171,6 +171,7 @@ tool will use these for you under the hood. These can be helpful for debugging, 
 
 -}
 
+import Array exposing (Array)
 import Dict exposing (Dict)
 import Internal.TsJsonType exposing (..)
 import Internal.TypeReducer as TypeReducer
@@ -574,6 +575,15 @@ list : Encoder a -> Encoder (List a)
 list (Encoder encodeFn tsType_) =
     Encoder
         (\input -> Encode.list encodeFn input)
+        (List tsType_)
+
+
+{-| Like `Encode.list`, but takes an `Array` instead of a `List` as input.
+-}
+array : Encoder a -> Encoder (Array a)
+array (Encoder encodeFn tsType_) =
+    Encoder
+        (\input -> Encode.array encodeFn input)
         (List tsType_)
 
 
